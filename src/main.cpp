@@ -2,7 +2,7 @@
 
 #define PINSENSOR 13
 #define PINOUT 12
-const int INTERCOM_INTERVAL = 500;
+const int INTERCOM_INTERVAL = 50;
 bool state = false;
 bool future_state = false;
 unsigned long lastPoll = 0;
@@ -22,15 +22,11 @@ void setupHandler() {
 }
 
 void intercomLoopHander(){
-  bool new_state = false;
+  bool new_state = state;
   if (millis() - lastPoll >= INTERCOM_INTERVAL * 1UL) {
     new_state = digitalRead(PINSENSOR) == LOW;
-    if (new_state != state) {
-      future_state = new_state;
-      update_date = millis();
-    }
-    else if (future_state != state) {
-      if (millis() - update_date > 100){
+    if (future_state != state) {
+      if (millis() - update_date > 200){
         if (future_state) {
           intercomNode.setProperty("ringing").setRetained(true).send("true");
         } else {
@@ -38,9 +34,12 @@ void intercomLoopHander(){
         }
         state = future_state;
       }
+    } else if (new_state != state) {
+      future_state = new_state;
+      update_date = millis();
     }
+    lastPoll = millis();
   }
-  lastPoll = millis();
 }
 
 void loopHandler() {
