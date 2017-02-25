@@ -4,3 +4,4 @@
 .gcc-flags.json
 *.gz
 config.json
+homie-intercom
