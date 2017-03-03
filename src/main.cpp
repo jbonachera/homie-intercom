@@ -2,7 +2,7 @@
 
 #define PINSENSOR 13
 #define PINOUT 12
-const int INTERCOM_INTERVAL = 50;
+const int INTERCOM_INTERVAL = 100;
 bool state = false;
 bool future_state = false;
 unsigned long lastPoll = 0;
@@ -26,7 +26,7 @@ void intercomLoopHander(){
   if (millis() - lastPoll >= INTERCOM_INTERVAL * 1UL) {
     new_state = digitalRead(PINSENSOR) == LOW;
     if (future_state != state) {
-      if (millis() - update_date > 200){
+      if (millis() - update_date > 150){
         if (future_state) {
           intercomNode.setProperty("ringing").setRetained(true).send("true");
         } else {
@@ -49,7 +49,7 @@ void loopHandler() {
 void setup() {
   Serial.begin(115200);
   Serial << endl << endl;
-  Homie_setFirmware("vx-intercom-sensor", "1.0.3");
+  Homie_setFirmware("vx-intercom-sensor", "1.0.4");
   Homie_setBrand("vx-labs")
   intercomNode.advertise("unit");
   intercomNode.advertise("room");
