@@ -18,3 +18,4 @@ deploy:
   - homie-intercom.sha512
   on:
     repo: jbonachera/homie-intercom
+    tags: true
