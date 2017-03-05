@@ -49,7 +49,7 @@ void loopHandler() {
 void setup() {
   Serial.begin(115200);
   Serial << endl << endl;
-  Homie_setFirmware("vx-intercom-sensor", "1.0.4");
+  Homie_setFirmware("intercom", "1.0.5");
   Homie_setBrand("vx-labs")
   intercomNode.advertise("unit");
   intercomNode.advertise("room");
