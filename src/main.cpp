@@ -17,6 +17,7 @@ HomieNode intercomNode("intercom", "intercom");
 void setupHandler() {
   pinMode(PINSENSOR, INPUT_PULLUP);
   pinMode(PINOUT, OUTPUT);
+  digitalWrite(PINOUT, HIGH);
   intercomNode.setProperty("unit").send("bool");
   intercomNode.setProperty("room").send(roomSetting.get());
 }
@@ -29,8 +30,10 @@ void intercomLoopHander(){
       if (millis() - update_date > 150){
         if (future_state) {
           intercomNode.setProperty("ringing").setRetained(true).send("true");
+          digitalWrite(PINOUT, LOW);
         } else {
           intercomNode.setProperty("ringing").setRetained(true).send("false");
+          digitalWrite(PINOUT, HIGH);
         }
         state = future_state;
       }
