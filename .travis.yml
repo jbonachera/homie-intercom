@@ -3,10 +3,7 @@ language: go
 services:
 - docker
 script:
-- docker build -t homie-intercom:build-$TRAVIS_COMMIT -f Dockerfile.build . ;
-- docker run homie-intercom:build-$TRAVIS_COMMIT /usr/local/bin/get-artifact > homie-intercom;
-- md5sum homie-intercom > homie-intercom.md5
-- sha512sum homie-intercom > homie-intercom.sha512
+  - make build
 deploy:
   provider: releases
   skip_cleanup: true
