@@ -21,6 +21,7 @@ void setupHandler() {
   digitalWrite(PINOUT, LOW);
   intercomNode.setProperty("unit").send("bool");
   intercomNode.setProperty("room").send(roomSetting.get());
+  intercomNode.setProperty("ringing").setRetained(true).send("false");
 }
 
 void intercomLoopHander(){
@@ -31,10 +32,10 @@ void intercomLoopHander(){
       if (millis() - update_date > 150){
         if (future_state) {
           intercomNode.setProperty("ringing").setRetained(true).send("true");
-          digitalWrite(PINOUT, LOW);
+          digitalWrite(PINOUT, HIGH);
         } else {
           intercomNode.setProperty("ringing").setRetained(true).send("false");
-          digitalWrite(PINOUT, HIGH);
+          digitalWrite(PINOUT, LOW);
         }
         state = future_state;
       }
