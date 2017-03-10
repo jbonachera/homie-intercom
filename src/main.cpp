@@ -17,7 +17,7 @@ HomieNode intercomNode("intercom", "intercom");
 void setupHandler() {
   pinMode(PINSENSOR, INPUT_PULLUP);
   pinMode(PINOUT, OUTPUT);
-  digitalWrite(PINOUT, HIGH);
+  digitalWrite(PINOUT, LOW);
   intercomNode.setProperty("unit").send("bool");
   intercomNode.setProperty("room").send(roomSetting.get());
 }
@@ -30,10 +30,10 @@ void intercomLoopHander(){
       if (millis() - update_date > 150){
         if (future_state) {
           intercomNode.setProperty("ringing").setRetained(true).send("true");
-          digitalWrite(PINOUT, LOW);
+          digitalWrite(PINOUT, HIGH);
         } else {
           intercomNode.setProperty("ringing").setRetained(true).send("false");
-          digitalWrite(PINOUT, HIGH);
+          digitalWrite(PINOUT, LOW);
         }
         state = future_state;
       }
@@ -52,7 +52,7 @@ void loopHandler() {
 void setup() {
   Serial.begin(115200);
   Serial << endl << endl;
-  Homie_setFirmware("intercom", "1.0.7");
+  Homie_setFirmware("intercom", "1.0.8");
   Homie_setBrand("vx-labs")
   intercomNode.advertise("unit");
   intercomNode.advertise("room");
