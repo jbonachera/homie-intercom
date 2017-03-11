@@ -3,6 +3,7 @@
 .clang_complete
 .gcc-flags.json
 *.gz
+src/version.h
 config.json
 homie-intercom
 homie-intercom.md5
