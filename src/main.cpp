@@ -14,7 +14,7 @@ HomieNode intercomNode("intercom", "intercom");
 
 
 void setupHandler() {
-  pinMode(PINSENSOR, INPUT_PULLUP);
+  pinMode(PINSENSOR, INPUT);
   intercomNode.setProperty("unit").send("bool");
   intercomNode.setProperty("room").send(roomSetting.get());
   intercomNode.setProperty("ringing").setRetained(true).send("false");
