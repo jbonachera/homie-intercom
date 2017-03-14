@@ -2,7 +2,7 @@
 #include <version.h>
 
 #define PINSENSOR 13 //d7
-#define SENSOR_IS_RINGING LOW
+#define SENSOR_IS_RINGING HIGH
 #define INTERCOM_INTERVAL 100
 bool state = false;
 unsigned long lastPoll = 0;
@@ -26,7 +26,7 @@ void intercomLoopHander(){
     if (new_state != state) {
       if (new_state) {
         intercomNode.setProperty("ringing").setRetained(true).send("true");
-        
+
       } else {
         intercomNode.setProperty("ringing").setRetained(true).send("false");
       }
