@@ -48,7 +48,6 @@ void setup() {
   intercomNode.advertise("unit");
   intercomNode.advertise("room");
   intercomNode.advertise("ringing");
-  intercomNode.advertise("tension");
   Homie.setSetupFunction(setupHandler).setLoopFunction(loopHandler);
 
   roomSetting.setDefaultValue("NoRoom").setValidator([] (const char* candidate) {
