@@ -3,7 +3,7 @@
 
 #define PINSENSOR 13 //d7
 #define SENSOR_IS_RINGING HIGH
-#define INTERCOM_INTERVAL 100
+#define INTERCOM_INTERVAL 10
 bool state = false;
 unsigned long lastPoll = 0;
 
