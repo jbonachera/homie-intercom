@@ -3,7 +3,7 @@ snapshot: commit-version build
 release: tag-version build
 
 commit-version:
-	echo "#define VERSION \"$$(git describe --tags)-$$(git rev-parse --short HEAD)\"" > src/version.h
+	echo "#define VERSION \"$$(git rev-parse --short HEAD)\"" > src/version.h
 
 tag-version:
 	echo "#define VERSION \"$$(git describe --tags)\"" > src/version.h
