@@ -3,8 +3,9 @@
 
 #define PINSENSOR 13 //d7
 #define SENSOR_IS_RINGING HIGH
-#define INTERCOM_INTERVAL 10
-bool state = false;
+#define INTERCOM_INTERVAL 100
+bool state = true;
+bool updated = false;
 unsigned long lastPoll = 0;
 
 
@@ -20,17 +21,20 @@ void setupHandler() {
   intercomNode.setProperty("ringing").setRetained(true).send("false");
 }
 
+void toogle(){
+  state = !state;
+  updated = true;
+}
+
 void intercomLoopHander(){
   if (millis() - lastPoll >= INTERCOM_INTERVAL * 1UL) {
-    bool new_state = digitalRead(PINSENSOR) == SENSOR_IS_RINGING;
-    if (new_state != state) {
-      if (new_state) {
+    if (updated) {
+      if (state) {
         intercomNode.setProperty("ringing").setRetained(true).send("true");
-
       } else {
         intercomNode.setProperty("ringing").setRetained(true).send("false");
       }
-      state = new_state;
+      updated = false;
     }
     lastPoll = millis();
   }
@@ -54,6 +58,7 @@ void setup() {
     return true;
   });
 
+  attachInterrupt(PINSENSOR, toogle, CHANGE);
 
   Homie.setup();
 }
