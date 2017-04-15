@@ -1,25 +1,28 @@
 #include <Homie.h>
+#include <CustomBounce.hpp>
 #include <version.h>
+
 
 #define PINSENSOR 13 //d7
 
-int last_state = false;
+bool last_state = false;
 
+// The intercom is using a strange mecanism to announce someone is ringing, so we need a custom bounce logic.
+CustomBounce bouncer(PINSENSOR);
 
-HomieSetting<const char*> roomSetting("room", "The room this sensor will monitor");  // id, description
+HomieSetting<const char*> roomSetting("room", "The room this sensor will monitor"); 
 
 HomieNode intercomNode("intercom", "intercom");
-Bounce debouncer = Bounce();
 
 void setupHandler() {
-  pinMode(PINSENSOR, INPUT);
+
   intercomNode.setProperty("unit").send("bool");
   intercomNode.setProperty("room").send(roomSetting.get());
   intercomNode.setProperty("ringing").setRetained(true).send("false");
 }
 
 void intercomLoopHander(){
-  int state = debouncer.read();
+  bool state = bouncer.read();
   if (state != last_state) {
     last_state = state;
     intercomNode.setProperty("ringing").setRetained(true).send(state ? "true" : "false");
@@ -39,17 +42,18 @@ void setup() {
   intercomNode.advertise("room");
   intercomNode.advertise("ringing");
   Homie.setSetupFunction(setupHandler).setLoopFunction(loopHandler);
-
+  // Yay, lambda !
+  attachInterrupt(digitalPinToInterrupt(PINSENSOR), [](){
+    bouncer.handleInterrup();
+  }, CHANGE);
   roomSetting.setDefaultValue("NoRoom").setValidator([] (const char* candidate) {
     return true;
   });
-
-  debouncer.attach(PINSENSOR);
-  debouncer.interval(10);
+  pinMode(PINSENSOR, INPUT);
+  digitalWrite(PINSENSOR, LOW);
   Homie.setup();
 }
 
 void loop() {
   Homie.loop();
-  debouncer.update();
 }
